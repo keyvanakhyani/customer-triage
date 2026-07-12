@@ -34,14 +34,15 @@ def build_extract_chain():
     """Build a chain that extracts structured data from a message."""
     prompt = ChatPromptTemplate.from_messages([
         (
-            "system",
             "You extract structured data from a customer message. "
             "Return a JSON object with these keys: "
             "name (string or null), "
             "order_number (string or null), "
             "urgency (one of: low, medium, high), "
             "language (ISO code like 'en' or 'fa'). "
-            "Respond with ONLY the JSON object, no explanation.",
+            "Respond with ONLY the JSON object, no explanation. "
+            "Do not add any text before or after the JSON. "
+            "Do not add safety labels or prefixes."
         ),
         ("user", "{message}"),
     ])
@@ -71,3 +72,31 @@ def build_reply_chain():
     parser = StrOutputParser()
 
     return prompt | model | parser
+
+def triage_message(message: str) -> dict:
+    """Run the full triage pipeline on a single message.
+
+    Returns a dict with the category, extracted details, and draft reply.
+    """
+    # Step 1: classify
+    classify_chain = build_classify_chain()
+    category = classify_chain.invoke({"message": message})
+
+    # Step 2: extract structured data
+    extract_chain = build_extract_chain()
+    details = extract_chain.invoke({"message": message})
+
+    # Step 3: draft a reply using the results of steps 1 and 2
+    reply_chain = build_reply_chain()
+    reply = reply_chain.invoke({
+        "message": message,
+        "category": category,
+        "details": str(details),
+        "language": details.get("language", "en"),
+    })
+
+    return {
+        "category": category,
+        "details": details,
+        "reply": reply,
+    }
