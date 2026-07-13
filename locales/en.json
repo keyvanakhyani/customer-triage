@@ -1,0 +1,10 @@
+{
+    "title": "Customer Message Triage",
+    "description": "Classifies the message, extracts key data, and drafts a reply.",
+    "input_label": "Customer message",
+    "input_placeholder": "Paste a customer message here...",
+    "category_label": "Category",
+    "details_label": "Extracted details",
+    "reply_label": "Draft reply",
+    "empty_message": "Please enter a message."
+}

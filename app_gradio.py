@@ -3,12 +3,16 @@
 import gradio as gr
 
 from core.triage import triage_message
+from core.i18n import load_locale
+
+# Load UI text once. Change "fa" to "en" to switch the whole interface.
+t = load_locale("fa")
 
 
 def process_message(message: str) -> tuple[str, str, str]:
     """Take a message from the UI, run triage, return the three parts."""
     if not message.strip():
-        return "—", "—", "Please enter a message."
+        return "—", "—", t["empty_message"]
 
     result = triage_message(message)
 
@@ -19,20 +23,40 @@ def process_message(message: str) -> tuple[str, str, str]:
     return category, details, reply
 
 
+custom_css = """
+.gradio-container {
+    direction: rtl;
+}
+textarea, input {
+    text-align: right;
+    direction: rtl;
+}
+label, .gradio-container label span {
+    text-align: right !important;
+    direction: rtl;
+    display: block;
+}
+.gradio-container p, .gradio-container .prose {
+    text-align: right !important;
+    direction: rtl;
+}
+"""
+
 demo = gr.Interface(
     fn=process_message,
     inputs=gr.Textbox(
         lines=4,
-        label="Customer message",
-        placeholder="Paste a customer message here (Persian or English)...",
+        label=t["input_label"],
+        placeholder=t["input_placeholder"],
     ),
     outputs=[
-        gr.Textbox(label="Category"),
-        gr.Textbox(label="Extracted details"),
-        gr.Textbox(label="Draft reply"),
+         gr.Textbox(label=t["category_label"]),
+        gr.Textbox(label=t["details_label"]),
+        gr.Textbox(label=t["reply_label"]),
     ],
-    title="Customer Message Triage",
-    description="Classifies the message, extracts key data, and drafts a reply.",
+    title=t["title"],
+    description=t["description"],
+    css=custom_css,
 )
 
 if __name__ == "__main__":
