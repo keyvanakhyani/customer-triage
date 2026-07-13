@@ -1,0 +1,10 @@
+[
+    {"message": "This product arrived broken and I want a refund!", "category": "complaint"},
+    {"message": "Where is my order 4432? It's been two weeks.", "category": "order_inquiry"},
+    {"message": "Do you have this jacket in size large?", "category": "product_question"},
+    {"message": "سفارش 8899 من هنوز نرسیده، خیلی عصبانی‌ام", "category": "complaint"},
+    {"message": "قیمت این کفش چنده؟", "category": "product_question"},
+    {"message": "سفارشم کی می‌رسه؟ شماره 1122", "category": "order_inquiry"},
+    {"message": "Thanks for the great service!", "category": "other"},
+    {"message": "این شلوار رو تو رنگ مشکی هم دارید؟", "category": "product_question"}
+]
