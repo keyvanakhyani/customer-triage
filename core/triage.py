@@ -50,7 +50,7 @@ def build_extract_chain():
     model = get_model()
     parser = JsonOutputParser()
 
-    return prompt | model | parser
+    return prompt | model | RunnableLambda(_clean_model_noise) | parser
 
 
 def build_reply_chain():
