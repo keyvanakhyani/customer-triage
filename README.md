@@ -16,16 +16,23 @@ This tool automates the first pass: it reads the message, decides what kind of
 request it is, extracts the details that matter, and drafts a reply in the
 customer's language — ready for a human to approve and send.
 
+
 ## Status
 
-🚧 In development. Currently building the core chains.
+✅ Base project complete.
 
-- [ ] Core: classification chain
-- [ ] Core: structured extraction
-- [ ] Core: reply drafting
-- [ ] i18n: Persian and English locales
-- [ ] Gradio web interface
-- [ ] Evaluation and accuracy metrics
+- [x] Core: classification chain
+- [x] Core: structured extraction
+- [x] Core: reply drafting
+- [x] i18n: Persian and English locales
+- [x] Gradio web interface
+- [x] Evaluation and accuracy metrics
+  
+## Roadmap
+
+- [ ] Resilient JSON parser (recover free-model output noise)
+- [ ] Alert system for high-urgency messages
+- [ ] RAG: ground replies in real product docs
 
 ## Results
 
