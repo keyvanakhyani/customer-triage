@@ -6,5 +6,6 @@
     "category_label": "دسته",
     "details_label": "اطلاعات استخراج‌شده",
     "reply_label": "پاسخ پیش‌نویس",
-    "empty_message": "لطفاً یک پیام وارد کنید."
+    "empty_message": "لطفاً یک پیام وارد کنید.",
+    "alert_label": "هشدار تیم"
 }

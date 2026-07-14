@@ -9,10 +9,10 @@ from core.i18n import load_locale
 t = load_locale("fa")
 
 
-def process_message(message: str) -> tuple[str, str, str]:
-    """Take a message from the UI, run triage, return the three parts."""
+def process_message(message: str) -> tuple[str, str, str, str]:
+    """Take a message from the UI, run triage, return the four parts."""
     if not message.strip():
-        return "—", "—", t["empty_message"]
+        return "—", "—", t["empty_message"], "—"
 
     result = triage_message(message)
 
@@ -20,7 +20,10 @@ def process_message(message: str) -> tuple[str, str, str]:
     details = str(result["details"])
     reply = result["reply"]
 
-    return category, details, reply
+    # Alert may be None for normal messages — show a friendly placeholder
+    alert = result["alert"] if result["alert"] else "✅ No alert needed"
+
+    return category, details, reply, alert
 
 
 custom_css = """
@@ -50,9 +53,10 @@ demo = gr.Interface(
         placeholder=t["input_placeholder"],
     ),
     outputs=[
-         gr.Textbox(label=t["category_label"]),
+        gr.Textbox(label=t["category_label"]),
         gr.Textbox(label=t["details_label"]),
         gr.Textbox(label=t["reply_label"]),
+        gr.Textbox(label=t["alert_label"]),
     ],
     title=t["title"],
     description=t["description"],

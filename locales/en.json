@@ -6,5 +6,6 @@
     "category_label": "Category",
     "details_label": "Extracted details",
     "reply_label": "Draft reply",
-    "empty_message": "Please enter a message."
+    "empty_message": "Please enter a message.",
+    "alert_label": "Team alert"
 }
