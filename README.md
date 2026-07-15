@@ -1,3 +1,4 @@
+[🇮🇷 فارسی](README.fa.md)
 # Customer Message Triage
 
 An AI-powered tool that reads incoming customer messages, classifies them,
@@ -27,31 +28,35 @@ customer's language — ready for a human to approve and send.
 - [x] i18n: Persian and English locales
 - [x] Gradio web interface
 - [x] Evaluation and accuracy metrics
+- [x] Resilient parser for free-model output noise
+- [x] Alert system for high-urgency messages
   
 ## Roadmap
 
-- [ ] Resilient JSON parser (recover free-model output noise)
-- [ ] Alert system for high-urgency messages
 - [ ] RAG: ground replies in real product docs
+- [ ] Model routing: lightweight models for classification, higher-quality for replies
+- [ ] Telegram interface
 
 ## Results
 
-Classification accuracy on a bilingual (Persian + English) test set:
+Classification accuracy on a 20-case bilingual test set (Persian + English),
+including deliberately ambiguous boundary cases:
 
-| Version | Accuracy |
-|---|---|
-| Baseline | 75% |
-| With resilient parser | 87.5%+ |
+| Version | Accuracy | What changed |
+|---|---|---|
+| Baseline | 75% | zero-shot prompt, random free model |
+| + resilient parser | 80% | strips free-model output noise |
+| + pinned model | 90% | one fixed model instead of 12 random ones |
+| + few-shot & category definitions | **95%** | examples drawn from real failures |
 
-Error analysis on the baseline showed two failure modes: ambiguous boundary
-cases between categories, and output noise from free-tier models (which
-occasionally prepend labels like `User Safety: safe`, breaking JSON parsing).
+**Error analysis drove each fix.** Logging which model answered each case revealed
+that `openrouter/free` was routing requests across 12 different models — including
+a content-safety classifier that emitted `User Safety: safe` instead of a category.
+Pinning a primary model with `.with_fallbacks()` made results reproducible.
+The remaining failures were genuine boundary cases, which few-shot examples and
+explicit category definitions resolved.
 
-Adding a resilient parsing step (a `RunnableLambda` that strips known noise
-before the JSON parser) eliminated the noise-related failures.
-
-Note: the test set is small (8 cases) and free-tier models are non-deterministic,
-so accuracy varies between runs.
+Note: free-tier models are non-deterministic, so accuracy varies between runs.
 
 ## Features
 
@@ -97,4 +102,4 @@ copy .env.example .env
 # then edit .env and paste your key
 
 python app_gradio.py
-```#
+```
