@@ -7,9 +7,10 @@ venv/
 __pycache__/
 *.pyc
 .venv/
-test_config.py
-test_triage.py
-test_i18n.py
+# Temporary debug scripts
+test_*.py
+# but keep the meaningful security tests
+!test_guardrails.py
 
 # IDE
 .vscode/
