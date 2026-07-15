@@ -36,11 +36,31 @@ customer's language — ready for a human to approve and send.
 
 ## Results
 
-Classification accuracy on a bilingual (Persian + English) test set: **75%**.
+Classification accuracy on a bilingual (Persian + English) test set:
 
-Error analysis showed two failure modes: ambiguous boundary cases between
-categories, and output noise from free-tier models. A resilient output parser
-(planned) is expected to recover the noise-related errors.
+| Version | Accuracy |
+|---|---|
+| Baseline | 75% |
+| With resilient parser | 87.5%+ |
+
+Error analysis on the baseline showed two failure modes: ambiguous boundary
+cases between categories, and output noise from free-tier models (which
+occasionally prepend labels like `User Safety: safe`, breaking JSON parsing).
+
+Adding a resilient parsing step (a `RunnableLambda` that strips known noise
+before the JSON parser) eliminated the noise-related failures.
+
+Note: the test set is small (8 cases) and free-tier models are non-deterministic,
+so accuracy varies between runs.
+
+## Features
+
+- **Classification** — sorts messages into complaint / order inquiry / product question / other
+- **Structured extraction** — pulls name, order number, urgency, and language as JSON
+- **Reply drafting** — writes a reply in the customer's own language
+- **Smart alerting** — high-urgency messages and complaints trigger an internal team alert, in addition to the customer reply
+- **Resilient parsing** — strips output noise from free-tier models before parsing
+- **Bilingual UI** — Persian and English text separated into locale files, with RTL support
 
 ## Architecture
 
