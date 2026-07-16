@@ -1,8 +1,9 @@
 """Evaluate classification accuracy against a labeled test set."""
 
 import json
+import time
 
-from core.triage import build_classify_chain_raw
+from core.chains import build_classify_chain_raw
 
 
 def run_evaluation():
@@ -36,6 +37,7 @@ def run_evaluation():
 
         mark = "✓" if is_correct else "✗"
         print(f"#{case_id:2} {mark} expected={expected:18} predicted={predicted}")
+        time.sleep(4)  # stay under the 16 requests/min free-tier cap
 
     accuracy = correct / tested * 100 if tested else 0
     print(f"\nTested: {tested}/{len(test_cases)}")

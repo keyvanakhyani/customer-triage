@@ -21,6 +21,6 @@ def get_model() -> ChatOpenAI:
             api_key=os.environ["OPENROUTER_API_KEY"],
         )
 
-    primary = _build("google/gemma-4-26b-a4b-it:free")
+    primary = _build("google/gemma-4-26b-a4b-it:free").with_retry(stop_after_attempt=3)
     backups = [_build("openai/gpt-oss-120b:free"), _build("openai/gpt-oss-20b:free"),]
     return primary.with_fallbacks(backups)
